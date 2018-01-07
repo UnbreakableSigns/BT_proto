@@ -8,11 +8,11 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 public class IME extends InputMethodService {
-    @Override
-    public View onCreateInputView() {
-//        SurfaceView inputView = new SurfaceView(this);
-        View inputView = new SurfaceView(this);
-
-        return inputView;
-    }
+//    @Override
+//    public View onCreateInputView() {
+////        SurfaceView inputView = new SurfaceView(this);
+//        View inputView = new SurfaceView(this);
+//
+//        return inputView;
+//    }
 }

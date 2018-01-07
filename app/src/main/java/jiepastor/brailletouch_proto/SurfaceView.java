@@ -1,6 +1,5 @@
 package jiepastor.brailletouch_proto;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.PointF;
@@ -15,14 +14,13 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.GestureDetector;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class SurfaceView extends ConstraintLayout {
+public class SurfaceView extends AppCompatActivity {
     Point[] dotCoordinates = new Point[6];
     List<Dot> dotLayout = new ArrayList<>();
     int[] selectedPattern = new int[6];
@@ -32,14 +30,18 @@ public class SurfaceView extends ConstraintLayout {
     List<PointF> pointers = new ArrayList<>();
     Vibrator vibrator = null;
     TextToSpeech tts;
-    Context context;
 
-    public SurfaceView(Context context) {
-        super(context);
-        this.context = context;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //screen layout
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
 
         //text to speech
-        tts=new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+        tts=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if(status != TextToSpeech.ERROR) {
@@ -50,21 +52,43 @@ public class SurfaceView extends ConstraintLayout {
         });
 
         //gesture detector
-        gestureRecognizer= new GestureDetector(context, new GestureRecognizer());
+        gestureRecognizer= new GestureDetector(this, new GestureRecognizer());
 
         //vibrator
-        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         SetRefPoints();
         CreateLayout();
 
     }
 
+    public void onPause(){
+        if(tts !=null){
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        tts=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    tts.setLanguage(Locale.US);
+                    tts.setPitch(1.1f);
+                }
+            }
+        });
+    }
+
     void SetRefPoints(){
         DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        int height = this.getHeight();
-        int width = this.getWidth();
-        System.out.println("height - " + height + "width - " + width);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
         int radius = Dot.radius + 10;
 
         //right side
@@ -82,7 +106,7 @@ public class SurfaceView extends ConstraintLayout {
         dotLayout.clear();
 
         for (int x =0;x<6;x++) {
-            Dot d = new Dot(context, dotCoordinates[x].x, dotCoordinates[x].y, x + 1);
+            Dot d = new Dot(this, dotCoordinates[x].x, dotCoordinates[x].y, x + 1);
 
             dotLayout.add(d);
         }
@@ -91,7 +115,7 @@ public class SurfaceView extends ConstraintLayout {
         for(Dot d : dotLayout) clayout.addView(d);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onTouchEvent(MotionEvent event){
         int action = event.getActionMasked();
@@ -219,5 +243,4 @@ public class SurfaceView extends ConstraintLayout {
     void speakText(String text){
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, hashCode() + "");
     }
-
 }
