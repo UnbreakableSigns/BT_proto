@@ -1,34 +1,33 @@
-package jiepastor.brailletouch_proto;
+package jiepastor.brailletouch_proto.Braille;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jiepastor on 12/31/2017.
+ * Contains the Set of keys of a character
  */
 
 public class KeySet {
     class Key {
         private Character character;
-        int dot1, dot2, dot3, dot4, dot5, dot6;
+        private BraillePattern pattern = new BraillePattern();
 
         public Key(int[] pattern, char key){
             character = key;
-            dot1 = pattern[0];
-            dot2 = pattern[1];
-            dot3 = pattern[2];
-            dot4 = pattern[3];
-            dot5 = pattern[4];
-            dot6 = pattern[5];
+            this.pattern.setPattern(pattern[0],pattern[1],pattern[2],pattern[3],pattern[4],pattern[5]);
         }
 
-
-        public Character getCharacter() {
+        public Character getCharacterKey() {
             return character;
         }
 
-        public boolean isSameCharacter(int[] pattern){
-            return pattern[0] == dot1 && pattern[1] == dot2 && pattern[2]==dot3 && pattern[3]==dot4 && pattern[4]==dot5 && pattern[5]==dot6;
+        public boolean isSameCharacter(BraillePattern p){
+            return p.getDot1() == pattern.getDot1()
+                    && p.getDot2() == pattern.getDot2()
+                    && p.getDot3() == pattern.getDot3()
+                    && p.getDot4() == pattern.getDot4()
+                    && p.getDot5() == pattern.getDot5()
+                    && p.getDot6() == pattern.getDot6();
         }
     }
 
@@ -86,30 +85,30 @@ public class KeySet {
         symbols.add( new Key(new int[]{0,1,1,0,0,1},'?') );
     }
 
-    public Character getCharacter(int mode, int[] pattern){
+    public Character getCharacter(int mode, BraillePattern pattern){
         switch(mode){
             case LOWER_CASE_MODE:
                 for (Key key : alphabet) {
                     if(key.isSameCharacter(pattern))
-                        return key.getCharacter();
+                        return key.getCharacterKey();
                 }
                 break;
             case UPPER_CASE_MODE:
                 for (Key key : alphabet) {
                     if(key.isSameCharacter(pattern))
-                        return Character.toUpperCase(key.getCharacter());
+                        return Character.toUpperCase(key.getCharacterKey());
                 }
                 break;
             case NUMBER_MODE:
                 for (Key key : numbers) {
                     if(key.isSameCharacter(pattern))
-                        return key.getCharacter();
+                        return key.getCharacterKey();
                 }
                 break;
             case SYMBOL_MODE:
                 for (Key key : symbols) {
                     if(key.isSameCharacter(pattern))
-                        return key.getCharacter();
+                        return key.getCharacterKey();
                 }
                 break;
         }

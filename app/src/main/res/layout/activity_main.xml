@@ -5,7 +5,8 @@
     android:id="@+id/clayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="jiepastor.brailletouch_proto.SurfaceView">
+    android:background="@android:color/background_light"
+    tools:context="jiepastor.brailletouch_proto.View.SurfaceView">
 
     <TextView
         android:id="@+id/label"
@@ -15,7 +16,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:text="BrailleTouch"
         android:textAlignment="center"
         android:textSize="18sp"
         android:textStyle="italic"

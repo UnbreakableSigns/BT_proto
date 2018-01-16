@@ -1,4 +1,4 @@
-package jiepastor.brailletouch_proto;
+package jiepastor.brailletouch_proto.View;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,19 +10,19 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 /**
- * Created by jiepastor on 12/29/2017.
+ * Paints the dot on the view
  */
 
 public class Dot extends View {
-    Context context;
-    Paint paint = null;
-    Paint paintNo = null;
-    Canvas canvas;
-    boolean tapped;
+    private Context context;
+    private Paint paint = null;
+    private Paint paintNo = null;
+    private Canvas canvas;
+    private boolean tapped;
 
     public static int radius = 110;
-    int dotNo;
-    int x,y;
+    private int dotNo;
+    private int x,y;
 
     public Dot(Context context, int x, int y, int dotNo) {
         super(context);
@@ -41,22 +41,7 @@ public class Dot extends View {
         }
     }
 
-    public Dot(Context context, Point point, int dotNo) {
-        super(context);
-        try
-        {
-            this.x = point.x;
-            this.y = point.y;
-            this.context = context;
-            this.paint = new Paint();
-            this.paintNo = new Paint();
-            this.dotNo = dotNo;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
+    public Point getDotCoordinates(){return new Point(x,y);}
 
     public void tapDot(boolean t) {
         //set dot as selected
