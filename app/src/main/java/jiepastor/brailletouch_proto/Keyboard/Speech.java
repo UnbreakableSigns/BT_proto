@@ -8,7 +8,7 @@ import android.speech.tts.TextToSpeech;
 import java.util.Locale;
 
 /**
- * Created by jiepastor on 1/15/2018.
+ * Text to Speech class
  */
 
 public class Speech {

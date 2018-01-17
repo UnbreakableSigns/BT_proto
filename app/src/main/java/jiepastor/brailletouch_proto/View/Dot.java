@@ -49,6 +49,12 @@ public class Dot extends View {
         invalidate();
     }
 
+    public void repositionDot(Point point){
+        x = point.x;
+        y = point.y;
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -65,4 +71,7 @@ public class Dot extends View {
         canvas.drawText(dotNo+"",(float)x,(float) y + (radius/4),paintNo);
     }
 
+    public boolean isTapped() {
+        return tapped;
+    }
 }

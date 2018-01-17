@@ -1,6 +1,7 @@
 package jiepastor.brailletouch_proto.Braille;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,12 +23,7 @@ public class KeySet {
         }
 
         public boolean isSameCharacter(BraillePattern p){
-            return p.getDot1() == pattern.getDot1()
-                    && p.getDot2() == pattern.getDot2()
-                    && p.getDot3() == pattern.getDot3()
-                    && p.getDot4() == pattern.getDot4()
-                    && p.getDot5() == pattern.getDot5()
-                    && p.getDot6() == pattern.getDot6();
+            return Arrays.equals(pattern.getPattern(),p.getPattern());
         }
     }
 
@@ -85,7 +81,7 @@ public class KeySet {
         symbols.add( new Key(new int[]{0,1,1,0,0,1},'?') );
     }
 
-    public Character getCharacter(int mode, BraillePattern pattern){
+    public Character getBrailleCharacter(int mode, BraillePattern pattern){
         switch(mode){
             case LOWER_CASE_MODE:
                 for (Key key : alphabet) {

@@ -1,28 +1,18 @@
 package jiepastor.brailletouch_proto.View;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.drawable.GradientDrawable;
+import android.graphics.PointF;
 import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
-import android.util.DisplayMetrics;
-import android.util.Pair;
 import android.view.Display;
-import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import jiepastor.brailletouch_proto.Braille.BraillePattern;
 
 import static android.content.Context.WINDOW_SERVICE;
 
@@ -38,23 +28,12 @@ public class Layout extends ConstraintLayout {
     private int width;
 
     private List<Dot> dotLayout = new ArrayList<>();
-    private BraillePattern pattern = new BraillePattern();
-    private TextView label;
+    private String label = "BrailleTouch";
 
     public Layout(Context context) {
         super(context);
         this.context = context;
-        setBackgroundColor(Color.WHITE);
-
-        //add textview to layout
-        ConstraintSet constraints = new ConstraintSet();
-        constraints.clone(this);
-        label = new TextView(context);
-        label.setId(View.generateViewId());
-        label.setText("BrailleTouch");
-        constraints.center(label.getId(), ConstraintSet.PARENT_ID, ConstraintSet.LEFT,
-                0, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0, 0.5f);
-        constraints.applyTo(this);
+        setBackgroundColor(Color.BLACK);
 
         //get screen width and height
         WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
@@ -69,38 +48,29 @@ public class Layout extends ConstraintLayout {
         setDefaultReferencePoints();
     }
 
-    public BraillePattern getPattern() {return pattern;}
-
     public boolean fillDot(float touchX, float touchY){
         //fill dot when selected
         boolean isADotFilled = false;
-        int[] selectedPattern = new int[]{pattern.getDot1(),pattern.getDot2(),pattern.getDot3(),pattern.getDot4(),pattern.getDot5(),pattern.getDot6()};
-
         for (int n=0;n<6;n++)
         {
-            if (selectedPattern[n]== 0)
+            if (checkIfSelected(touchX,touchY,dotLayout.get(n).getDotCoordinates().x,dotLayout.get(n).getDotCoordinates().y,(float)Dot.radius))
             {
-                selectedPattern[n] = checkIfSelected(touchX,touchY,dotLayout.get(n).getDotCoordinates().x,dotLayout.get(n).getDotCoordinates().y,(float)Dot.radius) ? 1 : 0;
-
-                if(selectedPattern[n] == 1){
-                    dotLayout.get(n).tapDot(true);
-                    isADotFilled = true;
-                }
+                isADotFilled = true;
+                dotLayout.get(n).tapDot(true);
+                break;
             }
         }
-        pattern.setPattern(selectedPattern[0],selectedPattern[1],selectedPattern[2],selectedPattern[3],selectedPattern[4],selectedPattern[5]);
         return isADotFilled;
     }
 
     public void resetLayout(){
-        pattern = new BraillePattern();
         for(Dot dot : dotLayout) dot.tapDot(false);
     }
 
     private void setDefaultReferencePoints(){
         Point[] dotCoordinates = new Point[6];
 
-        Dot.radius = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)? height/6 : height/8;
+        Dot.radius = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)? height/6 : height/10;
         int radius = Dot.radius + 10;
 
         //right side
@@ -135,4 +105,41 @@ public class Layout extends ConstraintLayout {
         */
     }
 
+    public List<Dot> getDotLayout() {
+        return dotLayout;
+    }
+
+    public List<PointF> current_pointers = new ArrayList<>();
+
+    public void addCurrentPointer(PointF point){
+        current_pointers.add(point);
+        invalidate();
+    }
+
+    public void resetPointers(){
+        current_pointers.clear();
+        invalidate();
+    }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+
+        Paint paint = new Paint();
+        for(PointF point : current_pointers){
+            paint.setColor(Color.YELLOW);
+            canvas.drawCircle(point.x,point.y, 25, paint);
+        }
+
+        Paint paintLabel = new Paint();
+        paintLabel.setTextSize(150);
+        paintLabel.setColor(Color.WHITE);
+        paintLabel.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText(label,(canvas.getWidth() / 2),((canvas.getHeight() / 2) - ((paintLabel.descent() + paintLabel.ascent()) / 2)) ,paintLabel);
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+        invalidate();
+    }
 }
