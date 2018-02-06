@@ -5,9 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 /**
  * Paints the dot on the view
@@ -15,12 +13,13 @@ import android.widget.RelativeLayout;
 
 public class Dot extends View {
     private Context context;
+    private Canvas canvas;
+
     private Paint paint = null;
     private Paint paintNo = null;
-    private Canvas canvas;
     private boolean tapped;
 
-    public static int radius = 110;
+    public static int radius = 100;
     private int dotNo;
     private int x,y;
 
@@ -62,6 +61,7 @@ public class Dot extends View {
 
         int dotColor = tapped ? Color.DKGRAY : Color.BLUE;
         paint.setColor(dotColor);
+
 
         paintNo.setColor(Color.WHITE);
         paintNo.setTextSize(radius);

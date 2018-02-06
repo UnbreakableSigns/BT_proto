@@ -3,6 +3,7 @@
     package="jiepastor.brailletouch_proto">
 
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +24,7 @@
                 android:resource="@xml/method" />
         </service>
 
-        <activity android:screenOrientation="sensorLandscape" android:name=".Setting">
+        <activity android:name=".Setting" android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -7,12 +7,22 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.view.Display;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import jiepastor.brailletouch_proto.Keyboard.TouchPointer;
+import jiepastor.brailletouch_proto.Setting;
 
 import static android.content.Context.WINDOW_SERVICE;
 
@@ -20,20 +30,27 @@ import static android.content.Context.WINDOW_SERVICE;
  * Layout of the view
  */
 
-public class Layout extends ConstraintLayout {
+public class Layout extends RelativeLayout {
+
+    public static final int HORIZONTAL = 0;
+    public static final int VERTICAL = 1;
 
     private Context context;
 
     private int height;
     private int width;
+    private int orientation;
 
     private List<Dot> dotLayout = new ArrayList<>();
-    private String label = "BrailleTouch";
+    private String label = "";
+
+    private List<TouchPointer> listOfCurrentPointers = new ArrayList<>();
 
     public Layout(Context context) {
         super(context);
         this.context = context;
         setBackgroundColor(Color.BLACK);
+        setAlpha((float) 0.5);
 
         //get screen width and height
         WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
@@ -44,8 +61,13 @@ public class Layout extends ConstraintLayout {
         display.getSize(size);
         width=size.x;
         height=size.y;
+        orientation = width > height ? HORIZONTAL : VERTICAL;
 
         setDefaultReferencePoints();
+    }
+
+    public int getOrientation(){
+        return orientation;
     }
 
     public boolean fillDot(float touchX, float touchY){
@@ -70,7 +92,7 @@ public class Layout extends ConstraintLayout {
     private void setDefaultReferencePoints(){
         Point[] dotCoordinates = new Point[6];
 
-        Dot.radius = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)? height/6 : height/10;
+        Dot.radius = (orientation == HORIZONTAL) ? height/6 : height/10;
         int radius = Dot.radius + 10;
 
         //right side
@@ -94,6 +116,11 @@ public class Layout extends ConstraintLayout {
         }
     }
 
+    public void setLabel(String label) {
+        this.label = label;
+        invalidate();
+    }
+
     private boolean checkIfSelected(float x, float y, float h, float k, float r){
         return ((x-h)*(x-h) + (y-k)*(y-k)) <= r*r;
         /*
@@ -109,15 +136,8 @@ public class Layout extends ConstraintLayout {
         return dotLayout;
     }
 
-    public List<PointF> current_pointers = new ArrayList<>();
-
-    public void addCurrentPointer(PointF point){
-        current_pointers.add(point);
-        invalidate();
-    }
-
-    public void resetPointers(){
-        current_pointers.clear();
+    public void setCurrentTouchPoints(List<TouchPointer> p){
+        listOfCurrentPointers = p;
         invalidate();
     }
 
@@ -126,9 +146,11 @@ public class Layout extends ConstraintLayout {
         super.dispatchDraw(canvas);
 
         Paint paint = new Paint();
-        for(PointF point : current_pointers){
-            paint.setColor(Color.YELLOW);
-            canvas.drawCircle(point.x,point.y, 25, paint);
+        for(TouchPointer point : listOfCurrentPointers){
+            if(point.isPointActive()){
+                paint.setColor(Color.YELLOW);
+                canvas.drawCircle(point.getCoordinates().x,point.getCoordinates().y, 50, paint);
+            }
         }
 
         Paint paintLabel = new Paint();
@@ -138,8 +160,4 @@ public class Layout extends ConstraintLayout {
         canvas.drawText(label,(canvas.getWidth() / 2),((canvas.getHeight() / 2) - ((paintLabel.descent() + paintLabel.ascent()) / 2)) ,paintLabel);
     }
 
-    public void setLabel(String label) {
-        this.label = label;
-        invalidate();
-    }
 }
