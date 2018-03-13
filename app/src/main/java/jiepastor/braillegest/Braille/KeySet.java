@@ -1,4 +1,4 @@
-package jiepastor.brailletouch_proto.Braille;
+package jiepastor.braillegest.Braille;
 
 import java.util.ArrayList;
 import java.util.Arrays;

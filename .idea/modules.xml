@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BrailleTouch_Proto.iml" filepath="$PROJECT_DIR$/BrailleTouch_Proto.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BrailleGest.iml" filepath="$PROJECT_DIR$/BrailleGest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

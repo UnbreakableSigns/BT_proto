@@ -1,4 +1,4 @@
-package jiepastor.brailletouch_proto;
+package jiepastor.braillegest;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,4 +1,4 @@
-package jiepastor.brailletouch_proto.Braille;
+package jiepastor.braillegest.Braille;
 
 /**
  * The braille pattern consisting of six dots
@@ -11,6 +11,14 @@ public class BraillePattern {
     private int dot4;
     private int dot5;
     private int dot6;
+
+    public boolean setStringPattern(String string){
+        for(int i=0;i<6;i++){
+            if (!setDot(Integer.parseInt(String.valueOf(string.charAt(i))), i))
+                return false;
+        }
+        return true;
+    }
 
     public int[] getPattern(){
         return new int[]{dot1,dot2,dot3,dot4,dot5,dot6};
@@ -52,6 +60,29 @@ public class BraillePattern {
 
     public boolean isPatternEmpty(){
         return dot1 + dot2 + dot3 + dot4 + dot5 + dot6 == 0;
+    }
+
+    public boolean interpretString(String curString){
+        char[] array = curString.toCharArray();
+
+        if (array.length!=6)
+            return false;
+
+        try {
+            for (int i = 0; i < 6; i++) {
+                setDot(Integer.parseInt(String.valueOf(array[i])), i);
+            }
+        }
+        catch (Exception e){
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public String toString(){
+        return dot1 + "" + dot2+ "" + dot3+ "" + dot4+ "" + dot5+ "" + dot6 + "";
     }
 
 }

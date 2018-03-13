@@ -1,10 +1,10 @@
-package jiepastor.brailletouch_proto.View;
+package jiepastor.braillegest.View;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
+import android.graphics.PointF;
 import android.view.View;
 
 /**
@@ -19,11 +19,11 @@ public class Dot extends View {
     private Paint paintNo = null;
     private boolean tapped;
 
-    public static int radius = 100;
+    public static int radius = 20;
     private int dotNo;
-    private int x,y;
+    private float x,y;
 
-    public Dot(Context context, int x, int y, int dotNo) {
+    public Dot(Context context, float x, float y, int dotNo) {
         super(context);
         try
         {
@@ -40,17 +40,11 @@ public class Dot extends View {
         }
     }
 
-    public Point getDotCoordinates(){return new Point(x,y);}
+    public PointF getDotCoordinates(){return new PointF(x,y);}
 
     public void tapDot(boolean t) {
         //set dot as selected
         tapped = t;
-        invalidate();
-    }
-
-    public void repositionDot(Point point){
-        x = point.x;
-        y = point.y;
         invalidate();
     }
 
@@ -68,10 +62,6 @@ public class Dot extends View {
         paintNo.setTextAlign(Paint.Align.CENTER);
 
         canvas.drawCircle(x,y,  radius, paint);
-        canvas.drawText(dotNo+"",(float)x,(float) y + (radius/4),paintNo);
-    }
-
-    public boolean isTapped() {
-        return tapped;
+        canvas.drawText(dotNo+"",x,y + (radius/4),paintNo);
     }
 }

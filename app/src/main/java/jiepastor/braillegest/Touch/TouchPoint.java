@@ -1,12 +1,12 @@
-package jiepastor.brailletouch_proto.Keyboard;
+package jiepastor.braillegest.Touch;
 
 import android.graphics.PointF;
 
 /**
- * A point when user touches the screen
+ * A point (coordinate) when user touches the screen
  */
 
-public class TouchPointer{
+public class TouchPoint {
     private boolean isPointActive = false;
     private PointF point;
     private int id;
@@ -19,10 +19,6 @@ public class TouchPointer{
 
     public void onTouchMove(PointF point){
         this.point = point;
-    }
-
-    public void onTouchUp(){
-        isPointActive = false;
     }
 
     public boolean isPointActive(){

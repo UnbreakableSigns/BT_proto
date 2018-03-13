@@ -5,7 +5,7 @@
     android:id="@+id/c"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="jiepastor.brailletouch_proto.Setting">
+    tools:context="jiepastor.braillegest.SettingActivity">
 
     <LinearLayout
         android:id="@+id/h"
@@ -15,21 +15,36 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="6dp">
 
-        <Button
-            android:id="@+id/button"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:onClick="onButtonClick"
-            android:text="change keyboard"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="102dp" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <Switch
-            android:id="@+id/switch1"
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="enableKeyboardButtonClick"
+                android:text="Enable Keyboard" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="selectDefaultKeyboardButtonClick"
+                android:text="change keyboard"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="102dp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Lock Orientation" />
+            android:onClick="onHowToUseButtonClick"
+            android:text="How to use" />
 
         <EditText
             android:id="@+id/editText"
